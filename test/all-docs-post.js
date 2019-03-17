@@ -36,7 +36,7 @@ describe('POST /all_docs', function () {
       remote = new PouchDB(remoteURL)
       url1 = remoteURL.replace(/\/[a-z0-9]+$/, '')
       user1 = remoteURL.split(':')[1].substring(2);
-      access1 = {meta_access: { users: { [user1]: { r: true, w: true } } } };
+      access1 = { meta_access:[ 'u|'+ user1 ] };
       console.log(user1);
       console.log(access1);
       docs = docs.map(d =>{
@@ -53,7 +53,7 @@ describe('POST /all_docs', function () {
       return testUtils.createUser()
     }).then(async (remoteURL2) => {
       user2 = remoteURL2.split(':')[1].substring(2);
-      access2 = {meta_access: { users: { [user2]: { r: true, w: true } } } };
+      access2 = { meta_access:[ 'u|'+ user2 ] };
       docs2 = docs2.map(d =>{
         return {...d, ...access2};
       });
@@ -64,18 +64,21 @@ describe('POST /all_docs', function () {
     })
   })
 
-  it('POST /db/_all_docs with no parameters', (done) => {
+  it('POST /db/_all_docs with no parameters', async () => {
+    await wait(500);
+    console.log('ALL DOCS POST TEST:::: ', url1);
     var cloudant = require('nano')(url1)
     var r = {
       method: 'post',
       db: app.dbName,
       path: '_all_docs'
     }
-    cloudant.request(r, function (err, data) {
-      assert.strictEqual(err, null)
+    try {
+      const data = await cloudant.request(r);
       assert.strictEqual(typeof data, 'object')
       assert.strictEqual(typeof data.rows, 'object')
       assert.strictEqual(data.rows.length, docCount)
+    
       data.rows.forEach(function (row) {
         assert.strictEqual(typeof row, 'object')
         assert.strictEqual(typeof row.id, 'string')
@@ -84,9 +87,12 @@ describe('POST /all_docs', function () {
         assert.strictEqual(typeof row.doc, 'object')
         assert.strictEqual(row.id, row.key)
       })
-      done();
-    })
-  })
+    }
+    catch(err){
+      console.log(err);
+      assert.strictEqual(err, null)
+    }
+  });
 
   it('POST /db/_all_docs with keys parameters', function (done) {
     var keys = []

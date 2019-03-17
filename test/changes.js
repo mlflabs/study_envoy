@@ -23,8 +23,8 @@ describe('changes', function () {
       remoteURL = await testUtils.createUser();
       user= remoteURL.split(':')[1].substring(2);
       remote = new PouchDB(remoteURL)
-      docs = await remote.bulkDocs(docs);
-      await wait(1000)
+      const res2 = await remote.bulkDocs(docs);
+      await wait(500)
       response = await remote.changes()
 
       assert(response.results)
@@ -35,7 +35,7 @@ describe('changes', function () {
       let newDoc = testUtils.makeDocs(1)[0]
 
       //make sure doc has proper access
-      newDoc = Object.assign(newDoc, {meta_access:{users:{[user]:{r:true,w:true}}}});
+      newDoc = Object.assign(newDoc, { meta_access: ['u|'+user] });
       newDoc._id = response.results[0].id
       newDoc._rev = response.results[0].changes[0].rev
       

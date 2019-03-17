@@ -30,7 +30,7 @@ testUtils.cleanup = async (dbs, done) => {
 
   dbs.forEach(function (db) {
     new PouchDB(db).destroy(finished, finished)
-  })
+  });
 }
 
 testUtils.url = function (user, password) {
@@ -52,12 +52,12 @@ testUtils.uniqueUserUrl = function () {
   return testUtils.url(username, auth.sha1(username))
 }
 
-var makeUser = function () {
+var makeUser = (meta = {}) => {
   var p = new Promise(function (resolve, reject) {
     var username = testUtils.uniqueUsername()
     var password = 'thepassword'
     var url = testUtils.url(username, password)
-    auth.newUser(username, password, {}, function (err, data) {
+    auth.newUser(username, password, meta, function (err, data) {
       if (err) {
         return reject(err)
       }
@@ -67,11 +67,11 @@ var makeUser = function () {
   return p
 }
 
-testUtils.createUser = function (numUsers) {
+testUtils.createUser = function (numUsers = 1, meta = {}) {
   numUsers = numUsers || 1
   return new Promise(function (resolve, reject) {
     if (numUsers === 1) {
-      makeUser().then(function (url) {
+      makeUser(meta).then(function (url) {
         resolve(url)
       })
     } else {

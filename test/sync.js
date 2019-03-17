@@ -39,7 +39,7 @@ describe('test single user sync', function () {
 
       remoteURL = await testUtils.createUser();
       const user1 = remoteURL.split(':')[1].substring(2);
-      const access = {meta_access: { users: { [user1]: { r: true, w: true } } } };
+      const access = {meta_access: ['u|'+user1,] };
       docs = docs.map(d =>{
         return {...d, ...access};
       });
@@ -50,8 +50,9 @@ describe('test single user sync', function () {
 
       const res1 = await local.bulkDocs(docs);
       let t = await local.allDocs();
+      await wait(500);
       local.replicate.to(remote);
-      await wait(1000)
+      await wait(500)
       response = await remote.allDocs();
       assert.strictEqual(response.rows.length, docs.length)
     }
@@ -99,5 +100,7 @@ describe('test single user sync', function () {
     }).then(function (response) {
       assert.strictEqual(response.total_rows, docs.length)
     })
-  })
+  });
+
+
 })

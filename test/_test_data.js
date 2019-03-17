@@ -1,80 +1,25 @@
 exports.doc1 = {
   _id: '1',
-  meta_access: {
-    users: {
-      mike: {
-        r: true,
-        w: true
-      }
-    },
-    channels: {
-      test: {
-        r: true,
-        w: true
-      },
-      invalid:{
-        r: true,
-        w: true,
-      }
-    }
-  }
+  meta_access: ['u|mike', 'test', 'invalid']
 };
 exports.doc2 = {
   _id: '2',
-  meta_access: {
-    users: {
-      mike: {
-        r: true,
-        w: false
-      }
-    },
-    channels: {
-      test: {
-        r: true,
-        w: false
-      },
-      invalid:{
-  
-      }
-    }
-  }
+  meta_access: ['u|mike', 'test',]
 };
 exports.doc3 = {
   _id: '3',
-  meta_access: {
-    users: {
-      mike: {
-        r: false,
-        w: false
-      }
-    },
-    channels: {
-      test: {
-        r: false,
-        w: false
-      }
-    },
-    invalid:{
-
-    }
-  }
+  meta_access: ['u|mike']
+  
 };
 
 exports.doc4 = {
   _id: '4',
-  meta_access: {
-    users: {
-      bob: {
-        r: false,
-        w: false
-      }
-    }
-  }
+  meta_access: []
 };
 
 exports.mike = {
   name: 'mike',
-  channels: {
+  meta_access: {
     read: {
       r: true,
       w: false
@@ -94,7 +39,7 @@ exports.mike = {
 }
 exports.test1 = {
   name: 'test',
-  channels: {
+  meta_access: {
     test: {
       r: true,
       w: true
@@ -107,7 +52,7 @@ exports.test1 = {
 }
 exports.test2 = {
   name: 'test',
-  channels: {
+  meta_access: {
     test: {
       r: true,
       w: false
@@ -119,7 +64,7 @@ exports.test2 = {
 }
 exports.test3 = {
   name: 'test',
-  channels: {
+  meta_access: {
     test: {
       r: false,
       w: false
@@ -131,7 +76,7 @@ exports.test3 = {
 }
 exports.test4 = {
   name: 'test',
-  channels: {
+  meta_access: {
     invalid: {
 
     }

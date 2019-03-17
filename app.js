@@ -33,6 +33,8 @@ module.exports = (opts) => {
     app.use(morgan(app.opts.logFormat))
   }
 
+
+
   const main = () => {
     // Load custom middleware
     if (app.opts.middleware.length) {
@@ -72,7 +74,8 @@ module.exports = (opts) => {
     }
 
     // plug in custom routes
-    if (app.opts.router) {
+    if (opts && opts.router) {
+      console.log('Adding custom router');
       app.use(app.opts.router)
     }
 

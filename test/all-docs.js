@@ -21,7 +21,7 @@ describe('GET all_docs', function () {
     let remote = null
     let remote2 = null
     let response, data;
-
+    await wait(500);
     const remoteURL = await testUtils.createUser();
     remote = new PouchDB(remoteURL)
     response = await remote.bulkDocs(docs);
@@ -33,7 +33,8 @@ describe('GET all_docs', function () {
 
     const remoteURL2 = await testUtils.createUser()
     remote2 = new PouchDB(remoteURL2)
-    response = await remote2.bulkDocs(docs2)
+    response = await remote2.bulkDocs(docs2);
+    await wait(500);
     data = await remote.allDocs()
 
     assert.strictEqual(typeof data, 'object')
@@ -80,7 +81,7 @@ describe('GET all_docs', function () {
     let remoteURL = await testUtils.createUser();
     remote = new PouchDB(remoteURL)
     response = await remote.bulkDocs(docs)
-    assert.strictEqual(response.length, docCount, response)
+    assert.strictEqual(response.length, docCount)
     response.forEach(function (row) {
         assert(!row.error)
     })
@@ -91,7 +92,7 @@ describe('GET all_docs', function () {
     
     // ensure we can retrieve what we inserted
     // not implemented
-
+    await wait(500);
     data = await remote.allDocs({ include_docs: true })
     assert.strictEqual(typeof data, 'object')
     assert.strictEqual(typeof data.rows, 'object')
@@ -105,7 +106,7 @@ describe('GET all_docs', function () {
       assert.strictEqual(typeof row.doc, 'object')
     })
 
-
+    await wait(500);
     data = await remote2.allDocs({ include_docs: true })
     assert.strictEqual(typeof data, 'object')
     assert.strictEqual(typeof data.rows, 'object')
